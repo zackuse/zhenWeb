@@ -19,40 +19,39 @@ $(function () {
             },
             dataType: "json",
             success: function (res) {
-                console.log(res.data)
                 if (res.code == 0) {
                     var banner=res.data
-                    for (var i = 0; i < res.data.length; i++) {
-                        $('.swiper-wrapper .img1').attr("src", res.data[0].banner_img)
-                        $('.swiper-wrapper .img2').attr("src", res.data[1].banner_img)
+                    for (let i = 0; i < res.data.length; i++) {
+                        let div = document.createElement('div')
+                        div.className = 'swiper-slide'
+
+                        let img = document.createElement('img')
+                        img.src = res.data[i].banner_img
+                        div.appendChild(img)
+
+                        let swiper = document.getElementsByClassName('swiper-wrapper')[0]
+                        swiper.appendChild(div)
                     }
 
+                    // dom渲染完毕 初始化swiper
+                    let mySwiper = new Swiper('.swiper-container', {
+                        autoplay: 2000, //可选选项，自动滑动
+                        loop: true,
+            
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+            
+                        // 如果需要前进后退按钮
+                        nextButton: '.swiper-button-next',
+                        prevButton: '.swiper-button-prev'
+                    })
                 } else {
                     mui.toast(res.errmsg)
                 }
             }
         });
 
-        var type=$("#type").val()
-    $.ajax({
-        type: "GET",
-        url: AJAXURL + "Pc/get_pc_detail",
-        data: {
-            type:type
-        },
-        dataType: "json",
-        success: function (res) {
-            console.log(res)
-            if (res.errcode == 0) {
-                time();
-                mui.toast("发送成功")
-            } else {
-                mui.toast(res.errmsg);
-                $("#daojishi").hide();
-                $("#sendBtn").show();
-            }
-        }
-    });
+  
 })
 
 
